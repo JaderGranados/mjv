@@ -1,0 +1,30 @@
+version: '3'
+
+services: 
+  web: 
+    container_name: 'mjv_web'
+    restart: always
+    build: .
+    ports: 
+      - '3000:3000'
+    links: 
+      - mongo
+    volumes: 
+      - .:/usr/scr/app
+    command: npm run start
+  
+  mongo:
+    container_name: 'mjv_db'
+    image: mongo
+    ports: 
+      - 27017:27017
+  admin-mongo:
+    image: 0x59/admin-mongo:latest
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - CONN_NAME=mongo
+      - DB_HOST=mongo
+    links:
+      - mongo
